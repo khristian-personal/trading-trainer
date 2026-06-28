@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trade Log — Trading Trainer</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <span class="nav-logo">Trading Trainer</span>
+    <div class="nav-links">
+      <a href="/">Dashboard</a>
+      <a href="/checklist.html">Checklist</a>
+      <a href="/log.html" class="active">Log</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- Pattern Callouts -->
+    <section id="patterns-section" style="display:none">
+      <h2>Pattern Insights</h2>
+      <div id="patterns-container"></div>
+    </section>
+
+    <!-- Stats Panel -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-win-rate">—</div>
+        <div class="stat-label">Win Rate</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total-trades">0</div>
+        <div class="stat-label">Total Trades</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-avg-rr">—</div>
+        <div class="stat-label">Avg Planned R:R</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-streak">—</div>
+        <div class="stat-label">Current Streak</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-milestone">0/20</div>
+        <div class="stat-label">MCL Milestone</div>
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <div class="log-filters">
+      <select id="filter-instrument">
+        <option value="">All Instruments</option>
+        <option value="MCL">MCL</option>
+        <option value="MNQ">MNQ</option>
+      </select>
+      <select id="filter-outcome">
+        <option value="">All Outcomes</option>
+        <option value="Win">Win</option>
+        <option value="Loss">Loss</option>
+        <option value="No Trade">No Trade</option>
+        <option value="Invalid">Invalid</option>
+      </select>
+      <button id="filter-btn" class="btn btn--small">Filter</button>
+    </div>
+
+    <!-- Open Trades (awaiting outcome) -->
+    <section id="open-trades-section" style="display:none">
+      <h2>Open Trades <span class="badge badge--open">Awaiting Outcome</span></h2>
+      <div id="open-trades-container"></div>
+    </section>
+
+    <!-- Log Table -->
+    <section>
+      <h2>Setup Log</h2>
+      <div class="table-wrapper">
+        <table id="log-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Inst.</th>
+              <th>Direction</th>
+              <th>R:R</th>
+              <th>Outcome</th>
+              <th>Grade</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="log-tbody">
+            <tr><td colspan="7" class="empty-state">No setups logged yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Outcome Modal (for logging trade close) -->
+  <div id="outcome-modal" class="modal" style="display:none">
+    <div class="modal-content">
+      <h2>Log Outcome</h2>
+      <input type="hidden" id="outcome-setup-id">
+      <div class="form-group">
+        <label>Outcome</label>
+        <div class="outcome-buttons">
+          <button class="btn btn--success outcome-btn" data-outcome="Win">Win</button>
+          <button class="btn btn--danger outcome-btn" data-outcome="Loss">Loss</button>
+          <button class="btn btn--neutral outcome-btn" data-outcome="No Trade">No Trade</button>
+          <button class="btn btn--neutral outcome-btn" data-outcome="Invalid">Invalid</button>
+        </div>
+        <input type="hidden" id="selected-outcome">
+      </div>
+      <div class="form-group">
+        <label>Actual R:R (optional)</label>
+        <input type="number" id="actual-rr" step="0.01" placeholder="e.g. 2.4">
+      </div>
+      <div class="form-group">
+        <label>Final Grade</label>
+        <select id="final-grade">
+          <option value="">—</option>
+          <option value="A">A — Textbook</option>
+          <option value="B">B — Acceptable</option>
+          <option value="C">C — Marginal</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <textarea id="outcome-notes" rows="3" placeholder="What happened, what you'd do differently..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button id="save-outcome-btn" class="btn btn--primary">Save Outcome</button>
+        <button id="cancel-outcome-btn" class="btn btn--neutral">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/log.js"></script>
+</body>
+</html>

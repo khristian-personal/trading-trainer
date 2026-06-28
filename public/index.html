@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trading Trainer</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <span class="nav-logo">Trading Trainer</span>
+    <div class="nav-links">
+      <a href="/" class="active">Dashboard</a>
+      <a href="/checklist.html">Checklist</a>
+      <a href="/log.html">Log</a>
+      <span id="mnq-nav-link" class="nav-link-locked" title="Complete 20 MCL trades to unlock">
+        MNQ 🔒 <span id="milestone-nav">0/20</span>
+      </span>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- Briefing Classification Banner -->
+    <div id="classification-banner" class="banner banner--neutral">
+      <span id="classification-label">Loading briefing classification...</span>
+      <button id="override-btn" class="btn btn--small" style="display:none">Override</button>
+    </div>
+
+    <!-- Sit Out warning (shown when classification is Sit Out) -->
+    <div id="sitout-warning" class="alert alert--warning" style="display:none">
+      ⚠️ Briefing says <strong>Sit Out</strong>. Trading not recommended today.
+      <button id="sitout-override-btn" class="btn btn--small btn--warning">Proceed Anyway</button>
+    </div>
+
+    <div class="dashboard-grid">
+
+      <!-- MCL Context Panel -->
+      <section class="card" id="mcl-panel">
+        <h2>MCL Context</h2>
+        <div class="context-row">
+          <label>OR Timeframe</label>
+          <span id="or-timeframe">—</span>
+        </div>
+        <div class="context-row">
+          <label>OR High (ORH)</label>
+          <span id="orh">—</span>
+        </div>
+        <div class="context-row">
+          <label>OR Low (ORL)</label>
+          <span id="orl">—</span>
+        </div>
+        <div class="context-row">
+          <label>VWAP</label>
+          <span id="vwap">—</span>
+        </div>
+        <div class="context-row">
+          <label>OR Status</label>
+          <span id="or-status" class="badge badge--waiting">Waiting</span>
+        </div>
+
+        <!-- Manual entry fallback -->
+        <div id="manual-entry" class="manual-entry">
+          <p class="hint">No webhook received. Enter levels manually:</p>
+          <div class="form-row">
+            <input type="number" id="manual-orh" placeholder="ORH" step="0.01">
+            <input type="number" id="manual-orl" placeholder="ORL" step="0.01">
+            <input type="number" id="manual-vwap" placeholder="VWAP" step="0.01">
+          </div>
+          <button id="manual-submit-btn" class="btn btn--primary">Set Levels</button>
+        </div>
+      </section>
+
+      <!-- Session Setup -->
+      <section class="card" id="session-panel">
+        <h2>Today's Session</h2>
+        <div class="form-group">
+          <label for="classification-select">Briefing Classification</label>
+          <select id="classification-select">
+            <option value="">Select...</option>
+            <option value="Aggressive">Aggressive</option>
+            <option value="Defensive">Defensive</option>
+            <option value="Sit Out">Sit Out</option>
+          </select>
+        </div>
+        <button id="save-classification-btn" class="btn btn--primary">Save</button>
+
+        <hr>
+
+        <button id="start-checklist-btn" class="btn btn--primary btn--large" disabled>
+          Start Checklist
+        </button>
+        <p id="checklist-disabled-hint" class="hint">OR levels must be set before starting the checklist.</p>
+      </section>
+
+      <!-- Milestone Counter -->
+      <section class="card" id="milestone-panel">
+        <h2>MCL Milestone</h2>
+        <div class="milestone-counter">
+          <span id="milestone-count">0</span>
+          <span class="milestone-total">/ 20</span>
+        </div>
+        <div class="progress-bar">
+          <div id="milestone-bar" class="progress-bar__fill" style="width: 0%"></div>
+        </div>
+        <p id="milestone-hint" class="hint">Complete 20 MCL trades to unlock MNQ.</p>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

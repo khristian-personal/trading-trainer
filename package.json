@@ -1,0 +1,16 @@
+{
+  "name": "trading-trainer",
+  "version": "1.0.0",
+  "description": "A structured day trading trainer for MCL and MNQ futures with checklist enforcement, trade logging, and behavioral pattern analysis.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "ws": "^8.16.0"
+  }
+}

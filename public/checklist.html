@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ORB Checklist — Trading Trainer</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <span class="nav-logo">Trading Trainer</span>
+    <div class="nav-links">
+      <a href="/">Dashboard</a>
+      <a href="/checklist.html" class="active">Checklist</a>
+      <a href="/log.html">Log</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <div class="checklist-header">
+      <h1>ORB Pullback Checklist</h1>
+      <p class="strategy-label">MCL &middot; <span id="session-classification">—</span> Day &middot; <span id="or-timeframe-label">—</span> min OR</p>
+    </div>
+
+    <!-- Progress indicator -->
+    <div class="checklist-progress">
+      <div id="progress-fill" class="checklist-progress__fill" style="width: 0%"></div>
+    </div>
+    <p class="checklist-step-label">Step <span id="current-step">1</span> of 8</p>
+
+    <!-- Steps container — one step shown at a time -->
+    <div id="checklist-steps">
+
+      <!-- Step 1: News Check -->
+      <div class="checklist-step" id="step-1">
+        <div class="step-number">1</div>
+        <h2>News / Catalyst Check</h2>
+        <p>Is there a major scheduled economic event in the next 60 minutes?</p>
+        <p class="step-examples">Examples: EIA Petroleum Status Report, FOMC statement, CPI release, NFP</p>
+        <p class="step-hint">Check your economic calendar before answering. A high-impact event within 60 min = abort the session.</p>
+        <div class="step-actions">
+          <button class="btn btn--success" onclick="stepConfirm(1, 'clear')">✓ Clear — no events</button>
+          <button class="btn btn--danger" onclick="stepAbort('news_event')">✗ Event scheduled — abort</button>
+        </div>
+      </div>
+
+      <!-- Step 2: OR Formed -->
+      <div class="checklist-step hidden" id="step-2">
+        <div class="step-number">2</div>
+        <h2>Opening Range Formed</h2>
+        <p>The OR high and low are confirmed for the active timeframe (<span class="or-tf">—</span> min). Both levels are marked on your chart.</p>
+        <div class="or-levels-display">
+          <div>ORH: <strong id="step-orh">—</strong></div>
+          <div>ORL: <strong id="step-orl">—</strong></div>
+        </div>
+        <div class="step-actions">
+          <button class="btn btn--success" onclick="stepConfirm(2, 'confirmed')">✓ Confirmed — levels marked</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Breakout -->
+      <div class="checklist-step hidden" id="step-3">
+        <div class="step-number">3</div>
+        <h2>Breakout Occurred</h2>
+        <p>Did price break above ORH or below ORL on a clearly elevated volume candle?</p>
+        <p class="step-hint">The breakout candle should be noticeably larger in volume than the candles inside the range. If volume is light, this may be a fakeout — don't proceed.</p>
+        <div class="step-actions">
+          <button class="btn btn--success" onclick="stepConfirm(3, 'long')">↑ Long — breakout above ORH</button>
+          <button class="btn btn--success" onclick="stepConfirm(3, 'short')">↓ Short — breakout below ORL</button>
+          <button class="btn btn--neutral" onclick="stepAbort('no_breakout')">— No breakout — exit</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Pullback -->
+      <div class="checklist-step hidden" id="step-4">
+        <div class="step-number">4</div>
+        <h2>Pullback in Progress</h2>
+        <p>Is price returning toward the breakout level without fully re-entering the opening range?</p>
+        <p class="step-hint">For longs: price pulled back toward ORH but hasn't closed back below it. For shorts: price pulled back toward ORL but hasn't closed back above it. If price re-enters the OR, the setup is invalid.</p>
+        <div class="step-actions">
+          <button class="btn btn--success" onclick="stepConfirm(4, 'confirmed')">✓ Pullback in progress</button>
+          <button class="btn btn--danger" onclick="stepAbort('invalid_pullback')">✗ Price re-entered OR — invalid</button>
+        </div>
+      </div>
+
+      <!-- Step 5: Pullback Volume -->
+      <div class="checklist-step hidden" id="step-5">
+        <div class="step-number">5</div>
+        <h2>Pullback Volume</h2>
+        <p>Is the volume on the pullback candles lighter than the breakout candle?</p>
+        <p class="step-hint">Light pullback volume = healthy retracement. Sellers are not aggressively pushing against the move. Heavy pullback volume = potential reversal; the breakout may have been absorbed.</p>
+        <div class="step-actions">
+          <button class="btn btn--success" onclick="stepConfirm(5, 'light')">✓ Volume is lighter — healthy pullback</button>
+          <button class="btn btn--warning" onclick="stepFlag(5, 'heavy_volume')">⚠ Volume is heavy — proceed with caution</button>
+        </div>
+      </div>
+
+      <!-- Step 6: Confirmation Candle -->
+      <div class="checklist-step hidden" id="step-6">
+        <div class="step-number">6</div>
+        <h2>Confirmation Candle</h2>
+        <p>Has a rejection candle formed at the retest level?</p>
+        <p class="step-hint">Look for: a long lower wick (for longs) showing buyers defended the level, a bullish engulfing candle where buyers overwhelmed sellers, or a pin bar. If price is still falling into the level, wait for the candle to close.</p>
+        <div class="step-actions">
+          <button class="btn btn--success" onclick="stepConfirm(6, 'confirmed')">✓ Confirmation candle formed</button>
+          <button class="btn btn--neutral" onclick="stepWait(6)">⏳ Not yet — waiting for candle close</button>
+        </div>
+      </div>
+
+      <!-- Step 7: VWAP Alignment -->
+      <div class="checklist-step hidden" id="step-7">
+        <div class="step-number">7</div>
+        <h2>VWAP Alignment</h2>
+        <p>Is the trade direction aligned with VWAP?</p>
+        <div class="vwap-display">VWAP: <strong id="step-vwap">—</strong></div>
+        <p class="step-hint">For longs: price should be above VWAP — you're trading with the dominant daily flow. For shorts: price should be below VWAP. Trading against VWAP is not a hard block, but it reduces conviction.</p>
+        <div class="step-actions">
+          <button class="btn btn--success" onclick="stepConfirm(7, 'aligned')">✓ Aligned with VWAP</button>
+          <button class="btn btn--warning" onclick="stepFlag(7, 'vwap_misaligned')">⚠ Misaligned — override and note reason</button>
+        </div>
+      </div>
+
+      <!-- Step 8: Entry Parameters -->
+      <div class="checklist-step hidden" id="step-8">
+        <div class="step-number">8</div>
+        <h2>Entry Parameters</h2>
+        <p>Define your entry, stop, and target before submitting. Minimum R:R is 1:2.</p>
+        <div class="entry-form">
+          <div class="form-group">
+            <label>Entry Price</label>
+            <input type="number" id="entry-price" step="0.01" placeholder="0.00">
+          </div>
+          <div class="form-group">
+            <label>Stop Price</label>
+            <input type="number" id="stop-price" step="0.01" placeholder="0.00">
+          </div>
+          <div class="form-group">
+            <label>Target Price</label>
+            <input type="number" id="target-price" step="0.01" placeholder="0.00">
+          </div>
+          <div class="rr-display">
+            R:R — <span id="rr-value">Enter prices above</span>
+          </div>
+          <p id="rr-warning" class="alert alert--warning" style="display:none">R:R is below 1:2 minimum. Adjust your target or tighten your stop.</p>
+          <div class="form-group">
+            <label>Setup Grade</label>
+            <select id="setup-grade">
+              <option value="">Select grade...</option>
+              <option value="A">A — Textbook</option>
+              <option value="B">B — Acceptable</option>
+              <option value="C">C — Marginal</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Notes (what you see, what you expect)</label>
+            <textarea id="setup-notes" rows="3" placeholder="1-3 sentences: what I saw, why I'm taking this..."></textarea>
+          </div>
+          <button id="submit-setup-btn" class="btn btn--primary btn--large" disabled>
+            Submit Setup
+          </button>
+        </div>
+      </div>
+
+      <!-- Abort / Invalid screen -->
+      <div class="checklist-step hidden" id="step-abort">
+        <div class="step-number abort-icon">✗</div>
+        <h2 id="abort-title">Setup Aborted</h2>
+        <p id="abort-message">This session has been logged.</p>
+        <a href="/" class="btn btn--primary">Back to Dashboard</a>
+      </div>
+
+    </div><!-- end #checklist-steps -->
+
+  </main>
+
+  <script src="/js/checklist.js"></script>
+</body>
+</html>
